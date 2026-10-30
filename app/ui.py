@@ -179,7 +179,8 @@ def monitoring_view():
 
 AUTHORS = ("[@luishsantos100](https://github.com/luishsantos100), "
             "[@pandyasaniya710](https://github.com/pandyasaniya710), "
-            "[@Akashpatel2509](https://github.com/Akashpatel2509)")
+            "[@Akashpatel2509](https://github.com/Akashpatel2509), "
+            "[@RenishPatell](https://github.com/RenishPatell)")
 
 ABOUT = f"""
 ### Healthcare / Critical Systems Patch Prioritization Agent (Group 4B)

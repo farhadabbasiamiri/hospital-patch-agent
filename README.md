@@ -2,7 +2,7 @@
 
 **AI/ML in Cybersecurity · Laurentian University · Fall 2026 · Defensive use only**
 
-**Authors:** [@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), [@Akashpatel2509](https://github.com/Akashpatel2509)
+**Authors:** [@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), [@Akashpatel2509](https://github.com/Akashpatel2509), [@RenishPatell](https://github.com/RenishPatell)
 
 Hospitals can't patch everything right away. Rebooting an infusion-pump server or a CT console can delay patient care, and medical device vendors must validate patches before they can be installed. This MVP ranks every vulnerability in a **synthetic hospital** and recommends a safe action for each one:
 **PATCH · ISOLATE · MONITOR · DEFER-WITH-CONTROLS**. Every recommendation cites the hospital's policies and waits for a named human approver.
@@ -104,7 +104,7 @@ docs/              WEEKLY_GUIDE, ARCHITECTURE, DATA_CARD, PROPOSAL, DEMO_SCRIPT,
 Synthetic data only. No scanning, no real systems, no malware. The agent **never** changes anything: it recommends, and humans approve. Approval only records the decision. The only external data is public vulnerability metadata (NVD, CISA KEV, FIRST EPSS). No API keys are stored in the code.
 
 ## Authors
-[@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), and [@Akashpatel2509](https://github.com/Akashpatel2509).
+[@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), [@Akashpatel2509](https://github.com/Akashpatel2509), and [@RenishPatell](https://github.com/RenishPatell).
 
 ## Team
 | Student | Role | Owns |
