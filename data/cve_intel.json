@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "source": "offline_snapshot",
+    "note": "Real CVE IDs. CVSS / KEV / EPSS values are an approximate offline snapshot for demo use. Run `python scripts/refresh_intel.py` on a machine with internet access to overwrite them with live values from NVD, CISA KEV and FIRST EPSS before your final evaluation.",
+    "fields": "cvss = NVD CVSS v3.x base score; kev = in CISA Known Exploited Vulnerabilities catalog; epss = FIRST EPSS 30-day exploitation probability"
+  },
+  "cves": {
+    "CVE-2021-44228": {"title": "Apache Log4j2 JNDI remote code execution (Log4Shell)", "product": "Apache Log4j2", "cvss": 10.0, "kev": true, "epss": 0.97},
+    "CVE-2022-22965": {"title": "Spring Framework RCE via data binding (Spring4Shell)", "product": "Spring Framework", "cvss": 9.8, "kev": true, "epss": 0.97},
+    "CVE-2021-4034": {"title": "polkit pkexec local privilege escalation (PwnKit)", "product": "polkit (Linux)", "cvss": 7.8, "kev": true, "epss": 0.85},
+    "CVE-2024-6387": {"title": "OpenSSH signal handler race condition RCE (regreSSHion)", "product": "OpenSSH", "cvss": 8.1, "kev": false, "epss": 0.40},
+    "CVE-2014-0160": {"title": "OpenSSL heartbeat information disclosure (Heartbleed)", "product": "OpenSSL", "cvss": 7.5, "kev": true, "epss": 0.97},
+    "CVE-2023-48795": {"title": "SSH transport prefix truncation (Terrapin)", "product": "SSH implementations", "cvss": 5.9, "kev": false, "epss": 0.50},
+    "CVE-2016-2183": {"title": "3DES/Blowfish birthday attack on TLS (Sweet32)", "product": "TLS libraries", "cvss": 7.5, "kev": false, "epss": 0.20},
+    "CVE-2022-0778": {"title": "OpenSSL BN_mod_sqrt infinite loop denial of service", "product": "OpenSSL", "cvss": 7.5, "kev": false, "epss": 0.05},
+    "CVE-2023-38545": {"title": "curl SOCKS5 heap buffer overflow", "product": "curl / libcurl", "cvss": 9.8, "kev": false, "epss": 0.30},
+    "CVE-2019-0708": {"title": "Windows Remote Desktop Services RCE (BlueKeep)", "product": "Windows 7 / Server 2008 RDP", "cvss": 9.8, "kev": true, "epss": 0.97},
+    "CVE-2017-0144": {"title": "Windows SMBv1 remote code execution (EternalBlue)", "product": "Windows SMBv1", "cvss": 8.1, "kev": true, "epss": 0.97},
+    "CVE-2021-34527": {"title": "Windows Print Spooler RCE (PrintNightmare)", "product": "Windows Print Spooler", "cvss": 8.8, "kev": true, "epss": 0.95},
+    "CVE-2022-30190": {"title": "Microsoft MSDT remote code execution (Follina)", "product": "Windows MSDT / Office", "cvss": 7.8, "kev": true, "epss": 0.96},
+    "CVE-2023-23397": {"title": "Microsoft Outlook elevation of privilege via NTLM relay", "product": "Microsoft Outlook", "cvss": 9.8, "kev": true, "epss": 0.90},
+    "CVE-2020-1472": {"title": "Netlogon elevation of privilege (Zerologon)", "product": "Windows Server Netlogon", "cvss": 10.0, "kev": true, "epss": 0.97},
+    "CVE-2021-21972": {"title": "VMware vCenter Server vSphere Client RCE", "product": "VMware vCenter Server", "cvss": 9.8, "kev": true, "epss": 0.97},
+    "CVE-2021-22005": {"title": "VMware vCenter Server analytics file upload RCE", "product": "VMware vCenter Server", "cvss": 9.8, "kev": true, "epss": 0.96},
+    "CVE-2021-26855": {"title": "Microsoft Exchange Server SSRF (ProxyLogon)", "product": "Microsoft Exchange Server", "cvss": 9.8, "kev": true, "epss": 0.97},
+    "CVE-2023-34362": {"title": "Progress MOVEit Transfer SQL injection", "product": "Progress MOVEit Transfer", "cvss": 9.8, "kev": true, "epss": 0.95},
+    "CVE-2022-26134": {"title": "Atlassian Confluence OGNL injection RCE", "product": "Atlassian Confluence", "cvss": 9.8, "kev": true, "epss": 0.97},
+    "CVE-2019-19781": {"title": "Citrix ADC / Gateway directory traversal RCE", "product": "Citrix ADC / Gateway", "cvss": 9.8, "kev": true, "epss": 0.97},
+    "CVE-2024-3400": {"title": "Palo Alto PAN-OS GlobalProtect command injection", "product": "Palo Alto PAN-OS", "cvss": 10.0, "kev": true, "epss": 0.96},
+    "CVE-2022-40684": {"title": "Fortinet FortiOS authentication bypass", "product": "Fortinet FortiOS", "cvss": 9.8, "kev": true, "epss": 0.96},
+    "CVE-2024-21762": {"title": "Fortinet FortiOS SSL VPN out-of-bounds write", "product": "Fortinet FortiOS", "cvss": 9.8, "kev": true, "epss": 0.90},
+    "CVE-2023-20198": {"title": "Cisco IOS XE web UI privilege escalation", "product": "Cisco IOS XE", "cvss": 10.0, "kev": true, "epss": 0.94},
+    "CVE-2023-44487": {"title": "HTTP/2 Rapid Reset denial of service", "product": "HTTP/2 servers", "cvss": 7.5, "kev": true, "epss": 0.80},
+    "CVE-2019-12256": {"title": "Wind River VxWorks IPnet stack overflow (URGENT/11)", "product": "VxWorks RTOS (embedded medical devices)", "cvss": 9.8, "kev": false, "epss": 0.10},
+    "CVE-2020-11896": {"title": "Treck TCP/IP stack IPv4 tunneling RCE (Ripple20)", "product": "Treck TCP/IP (embedded medical devices)", "cvss": 10.0, "kev": false, "epss": 0.08},
+    "CVE-2019-11687": {"title": "DICOM file preamble allows embedded executable (PE/DICOM polyglot)", "product": "DICOM standard implementations", "cvss": 4.3, "kev": false, "epss": 0.01},
+    "CVE-2023-36884": {"title": "Microsoft Office and Windows HTML remote code execution", "product": "Microsoft Office / Windows", "cvss": 8.8, "kev": true, "epss": 0.90}
+  }
+}

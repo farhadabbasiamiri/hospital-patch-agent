@@ -1,0 +1,14 @@
+[
+  {"q": "Who must approve an emergency change on a life-critical system?", "expected": "POL-02 §3"},
+  {"q": "Can we install an update on a CT scanner that the manufacturer has not validated?", "expected": "POL-04 §2"},
+  {"q": "What is the deadline for a known exploited vulnerability on an internet-facing VPN?", "expected": "POL-01 §3"},
+  {"q": "How long can risk acceptance for a critical finding last before it expires?", "expected": "POL-05 §4"},
+  {"q": "Which compensating controls are required before we defer a patch?", "expected": "POL-05 §2"},
+  {"q": "Who approves isolating an imaging system from the network?", "expected": "POL-06 §3"},
+  {"q": "Can we patch a system with no downtime tolerance outside its window?", "expected": "POL-03 §3"},
+  {"q": "What should Clinical Engineering do when no validated patch exists for a device?", "expected": "POL-04 §3"},
+  {"q": "Is the AI agent allowed to apply patches automatically?", "expected": "POL-01 §5"},
+  {"q": "What must a change request include?", "expected": "POL-02 §4"},
+  {"q": "Is partial isolation or full isolation preferred for clinical systems?", "expected": "POL-06 §2"},
+  {"q": "Can CVSS alone be used to rank remediation work?", "expected": "POL-01 §2"}
+]
