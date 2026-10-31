@@ -1,7 +1,7 @@
 # Project Proposal: Group 4B Healthcare / Critical Systems Patch Prioritization Agent
 *(Week 1 deliverable, one page)*
 
-**Authors.** [@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), [@Akashpatel2509](https://github.com/Akashpatel2509), [@RenishPatell](https://github.com/RenishPatell)
+**Authors.** [@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), [@Akashpatel2509](https://github.com/Akashpatel2509), [@RenishPatell](https://github.com/RenishPatell), [@helikapatel89](https://github.com/helikapatel89)
 
 **Problem.** Hospitals carry hundreds of open vulnerabilities but can't patch them all right away. Downtime on imaging, infusion or EHR systems can delay care, and regulated medical devices can only take vendor-validated patches. Ranking by CVSS alone ignores whether a flaw is being exploited, how exposed the system is, and what patching would do to patients.
 
