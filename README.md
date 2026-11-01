@@ -2,6 +2,8 @@
 
 **AI/ML in Cybersecurity · Laurentian University · Fall 2026 · Defensive use only**
 
+**Supervisor:** [@farhadabbasiamiri](https://github.com/farhadabbasiamiri).
+
 **Authors:** [@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), [@Akashpatel2509](https://github.com/Akashpatel2509), [@RenishPatell](https://github.com/RenishPatell), [@helikapatel89](https://github.com/helikapatel89)
 
 Hospitals can't patch everything right away. Rebooting an infusion-pump server or a CT console can delay patient care, and medical device vendors must validate patches before they can be installed. This MVP ranks every vulnerability in a **synthetic hospital** and recommends a safe action for each one:
