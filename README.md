@@ -1,6 +1,7 @@
 # 🏥 Hospital Patch Prioritization Agent (Group 4B)
 
 **AI/ML in Cybersecurity · Laurentian University · Fall 2026 · Defensive use only**
+**Supervisor:** [@farhadabbasiamiri](https://github.com/farhadabbasiamiri).
 
 **Authors:** [@luishsantos100](https://github.com/luishsantos100), [@pandyasaniya710](https://github.com/pandyasaniya710), [@Akashpatel2509](https://github.com/Akashpatel2509), [@RenishPatell](https://github.com/RenishPatell), [@helikapatel89](https://github.com/helikapatel89)
 
