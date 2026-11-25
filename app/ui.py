@@ -15,8 +15,10 @@ from app.plan import build_plan
 
 PLAN = build_plan()
 DECISION_ICON = {"PATCH": "🩹", "ISOLATE": "🧱", "MONITOR": "👁️", "DEFER_WITH_CONTROLS": "⏸️"}
-REVIEWER_ROLES = ["CISO", "Emergency CAB (ECAB)", "IT Change Advisory Board (CAB)", "Clinical Engineering",
-                  "Clinical Lead", "Clinical Systems Lead", "Asset clinical/business owner",
+# Must match the approver names produced by app/decision.py exactly (quorum is checked by name).
+REVIEWER_ROLES = ["CISO", "Emergency CAB (ECAB)", "On-call Clinical Lead", "IT Change Advisory Board (CAB)",
+                  "Clinical Systems Lead", "Clinical Engineering (Biomed)", "Clinical Engineering",
+                  "Clinical Lead of affected unit", "Asset clinical/business owner",
                   "Owner team manager", "Security Operations"]
 
 CSS = """
@@ -139,13 +141,13 @@ def decide_approval(approval_id, reviewer, role, note, approve: bool):
     try:
         if approval_id is None:
             raise ValueError("Enter the approval id from the pending table.")
-        pend = approvals.list_approvals("PENDING")
-        row = pend[pend.id == int(approval_id)]
-        if not row.empty and role and role.split(" (")[0] not in row.iloc[0].required_approvers:
-            raise ValueError(f"Role '{role}' is not an authorized approver for this change "
-                             f"(required: {row.iloc[0].required_approvers}).")
         status = approvals.review(int(approval_id), approve, reviewer, role, note)
-        msg = f"✅ Approval #{int(approval_id)} → **{status}** by {reviewer} ({role})."
+        if status == "PENDING":
+            missing = approvals.signoff_state(int(approval_id))["missing"]
+            msg = (f"✅ Sign-off recorded for #{int(approval_id)} by {reviewer} ({role}). "
+                   f"**Still pending** — waiting for: {', '.join(missing)}.")
+        else:
+            msg = f"✅ Approval #{int(approval_id)} → **{status}** by {reviewer} ({role})."
     except ValueError as e:
         msg = f"❌ {e}"
     p, h = queue_tables()
@@ -250,9 +252,9 @@ def build_app() -> gr.Blocks:
                           show_progress="full")
             submit_btn.click(submit_for_approval, rec_state, submit_msg)
 
-        with gr.Tab("3 · Approval Queue"):
-            gr.Markdown("**Human-in-the-loop checkpoint.** Only an authorized role from the required-approver list can "
-                        "approve. Approval records the decision in the change plan. Nothing is executed.")
+        with gr.Tab("3 · Approval Queue") as queue_tab:
+            gr.Markdown("**Human-in-the-loop checkpoint.** Every role in the required-approver list must sign off (quorum); "
+                        "any one of them can reject. Approval records the decision in the change plan. Nothing is executed.")
             pend_tbl = gr.Dataframe(label="Pending", interactive=False)
             with gr.Row():
                 a_id = gr.Number(label="Approval id", precision=0)
@@ -275,6 +277,7 @@ def build_app() -> gr.Blocks:
             refresh_q.click(queue_tables, None, [pend_tbl, hist_tbl])
             exp_ap.click(export_approved, None, exp_ap_file)
             demo.load(queue_tables, None, [pend_tbl, hist_tbl])
+            queue_tab.select(queue_tables, None, [pend_tbl, hist_tbl])
 
         with gr.Tab("4 · Policy Q&A (RAG)"):
             q = gr.Textbox(label="Ask about hospital patching policy",

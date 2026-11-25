@@ -104,7 +104,7 @@ def apply_guardrails(llm_out: dict | None, engine: dict, retrieved_ids: set[str]
     # Approval follows the engine; if LLM chose a different allowed option, recompute approvers.
     out["approval_required"] = engine["approval_required"] if decision == engine["decision"] else decision != "MONITOR"
     out["approvers"] = engine["approvers"] if decision == engine["decision"] else \
-        engine["approvers"] + ["(analyst chose alternative option: CISO review)"]
+        engine["approvers"] + ([] if "CISO" in engine["approvers"] else ["CISO"])
     if decision != engine["decision"]:
         flags.append(f"Agent chose allowed alternative {decision} instead of engine default {engine['decision']}; "
                      "flagged for CISO review.")
