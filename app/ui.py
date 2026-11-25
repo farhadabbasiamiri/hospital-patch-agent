@@ -60,7 +60,7 @@ def filter_plan(categories, tiers, decisions):
         df = df[df.decision.isin(decisions)]
     show = df[["rank", "record_id", "hostname", "category", "department", "cve_id", "cvss", "kev", "epss",
                "exposure", "patient_impact", "risk_score", "tier", "decision", "change_type", "due_in_days",
-               "approvers"]]
+               "approvers", "attack", "nist_csf"]]
     return kpis(df), show
 
 
@@ -82,6 +82,23 @@ def record_choices():
             for r in PLAN.itertuples()]
 
 
+def framework_lines(rec: dict) -> list[str]:
+    def ids(items):
+        return ", ".join(f"{i['id']} {i['name']}" for i in items) or "none"
+
+    def url(technique_id):
+        return f"https://attack.mitre.org/techniques/{technique_id.replace('.', '/')}/"
+
+    return [
+        "**MITRE ATT&CK** (team mapping)",
+        *[f"- [{t['id']}]({url(t['id'])}) {t['name']} · {t['tactics']}" for t in rec["attack_techniques"]],
+        f"- Why: {rec['attack_rationale']}",
+        f"- Mitigations applied by this decision: {ids(rec['mitigations_applied'])}",
+        f"- Mitigations already in place: {ids(rec['mitigations_in_place'])}",
+        "", "**NIST CSF 2.0**", *[f"- {c['id']}: {c['outcome']}" for c in rec["nist_csf"]],
+    ]
+
+
 def render_recommendation(rec: dict) -> str:
     if "error" in rec:
         return f"❌ {rec['error']}"
@@ -93,6 +110,7 @@ def render_recommendation(rec: dict) -> str:
         f"**Required approvers:** {', '.join(rec['approvers'])}",
         "", f"> {rec['summary']}", "", "**Evidence**", *[f"- {e}" for e in rec["evidence"]],
         "", "**Compensating controls**", *[f"- {c}" for c in rec["compensating_controls"]],
+        "", *framework_lines(rec),
         "", f"**Policy citations:** {', '.join(rec['policy_citations'])}", "",
         f"**Confidence:** {rec['confidence']} · **Uncertainty:** {rec['uncertainty'] or 'none stated'}", "",
         f"<sub>Mode: {rec['mode']} · model: {rec['model']} · engine default: {rec['engine_decision']} · "
@@ -199,6 +217,9 @@ patients. Ranking by CVSS alone ignores exploitation evidence, patient-safety im
 **How the agent works.** A local LLM (Ollama) chooses among 4 read-only tools, reads the evidence, and drafts a JSON
 recommendation. Guardrails then enforce that the decision is within the policy engine's allowed options, citations exist,
 and the approval requirement is never lowered. A named human approves or rejects in the Approval Queue.
+
+**Framework mapping.** Each finding is mapped to MITRE ATT&CK techniques and mitigations, and each decision to
+NIST CSF 2.0 subcategories (team mapping, see docs/CONTROL_MAPPING.md).
 
 **Safety boundaries.** Synthetic data only, no scanning, no real systems, no automatic changes, no live malware.
 Vulnerability metadata is public (NVD, CISA KEV, FIRST EPSS).

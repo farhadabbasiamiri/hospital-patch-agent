@@ -25,6 +25,10 @@ flowchart TD
     X[scripts/refresh_intel.py] -.->|live refresh| I
 ```
 
+## Framework mapping
+`app/frameworks.py` attaches MITRE ATT&CK techniques/mitigations and NIST CSF 2.0 subcategories to every
+finding from `data/framework_mapping.json`, outside the LLM. See `docs/CONTROL_MAPPING.md`.
+
 ## Data flow for one investigation
 1. The analyst selects a finding (asset + CVE) in Tab 2 and can add context.
 2. The agent sends the task, the system prompt and the 4 tool schemas to the local LLM.

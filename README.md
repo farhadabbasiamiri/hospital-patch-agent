@@ -24,6 +24,10 @@ A local LLM (Ollama) receives a finding. It **chooses** which of 4 read-only too
 
 **Guardrails** (`app/agent.py → apply_guardrails`): the decision must be one of the engine's allowed options. The approval requirement can never be lowered. Citations must come from retrieved policy text. If the LLM skips the risk engine, the guardrail runs it anyway. Invalid JSON falls back to the safe engine decision. Every override shows up in the UI as a ⚠️ flag.
 
+## MITRE ATT&CK and NIST CSF 2.0
+
+Every finding shows ATT&CK techniques and mitigations, and every decision maps to NIST CSF 2.0 subcategories (team analyst mapping, identifiers verified against the official sources). See [docs/CONTROL_MAPPING.md](docs/CONTROL_MAPPING.md).
+
 ## Quick start (local, no cloud)
 
 ```bash
@@ -50,7 +54,7 @@ python scripts/refresh_intel.py      # pulls live CVSS (NVD), KEV (CISA), EPSS (
 ## Tests and evaluation
 
 ```bash
-pytest -q                          # 28 unit/integration/guardrail tests
+pytest -q                          # 33 unit/integration/guardrail tests
 python eval/run_eval.py            # writes eval/results/eval_report.md
 python eval/run_eval.py --llm      # also evaluates the real Ollama agent
 ```

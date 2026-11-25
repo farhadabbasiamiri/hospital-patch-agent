@@ -14,6 +14,7 @@ import requests
 
 from app.config import OLLAMA_URL, OLLAMA_MODEL, LLM_TIMEOUT_S, AGENT_MAX_STEPS, DECISIONS
 from app.data_store import get_record, get_asset, get_cve, load_intel
+from app.frameworks import map_finding
 from app.monitoring import log_event, Timer
 from app.rag import get_index
 from app.tools import TOOL_SCHEMAS, execute_tool
@@ -246,6 +247,7 @@ def run_agent(record_id: str, analyst_note: str = "", llm=None, force_offline: b
         "allowed_options": engine["allowed_options"], "change_type": engine["change_type"],
         "due_in_days": engine["due_in_days"], "engine_reasons": engine["reasons"],
         **final,
+        **map_finding(cve["cve_id"], final["decision"], asset["controls"]),
         "status": "PENDING_HUMAN_APPROVAL" if final["approval_required"] else "INFORMATIONAL",
         "mode": mode, "model": OLLAMA_MODEL if mode == "llm" else "none (offline planner)",
         "intel_source": load_intel()["_meta"]["source"],

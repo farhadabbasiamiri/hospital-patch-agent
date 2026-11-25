@@ -3,6 +3,7 @@ import pandas as pd
 
 from app.data_store import load_assets, load_vulns, get_asset, get_cve
 from app.decision import decide
+from app.frameworks import map_finding
 
 
 def evaluate_record(record: dict) -> dict:
@@ -16,6 +17,7 @@ def build_plan() -> pd.DataFrame:
     for rec in load_vulns().to_dict("records"):
         e = evaluate_record(rec)
         a, c, r = e["asset"], e["cve"], e["result"]
+        f = map_finding(c["cve_id"], r["decision"], a["controls"])
         rows.append({
             "record_id": rec["record_id"],
             "asset_id": a["asset_id"],
@@ -36,6 +38,8 @@ def build_plan() -> pd.DataFrame:
             "due_in_days": r["due_in_days"],
             "approval_required": r["approval_required"],
             "approvers": ", ".join(r["approvers"]),
+            "attack": ", ".join(t["id"] for t in f["attack_techniques"]),
+            "nist_csf": ", ".join(x["id"] for x in f["nist_csf"]),
         })
     df = pd.DataFrame(rows).sort_values(["risk_score", "epss"], ascending=False).reset_index(drop=True)
     df.insert(0, "rank", df.index + 1)
