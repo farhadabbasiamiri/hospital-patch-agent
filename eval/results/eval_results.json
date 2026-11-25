@@ -9,16 +9,21 @@
   "e2e_offline": {
     "cases": 10,
     "success_rate": 1.0,
-    "median_latency_ms": 14,
-    "max_latency_ms": 17
+    "median_latency_ms": 11,
+    "max_latency_ms": 20
   },
   "e2e_scripted_llm": {
     "cases": 10,
     "success_rate": 1.0,
-    "median_latency_ms": 14,
-    "max_latency_ms": 17
+    "median_latency_ms": 10,
+    "max_latency_ms": 15
   },
-  "e2e_ollama": null,
+  "e2e_ollama": {
+    "cases": 10,
+    "success_rate": 1.0,
+    "median_latency_ms": 15121,
+    "max_latency_ms": 124139
+  },
   "guardrails": {
     "attempts": 20,
     "safe_output_rate": 1.0,

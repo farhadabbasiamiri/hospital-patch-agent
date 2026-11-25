@@ -20,7 +20,7 @@ Decision accuracy **100%** · approval gate **100%** · correct approver **100%*
 | S12 | PACS server, DICOM polyglot, no vendor fix | MONITOR | MONITOR | 37.7 | Low | True |
 
 ## 2. End-to-end agent runs
-Offline planner: success **100%** on 10 cases, median 14 ms. Scripted tool-calling LLM: success **100%**. Real Ollama run: not executed (use `--llm`).
+Offline planner: success **100%** on 10 cases, median 11 ms. Scripted tool-calling LLM: success **100%**. Ollama `qwen2.5:7b`: success **100%**, median 15121 ms.
 
 | record_id | decision | success | engine_consulted | policy_consulted | citations_valid | approval_preserved |
 |---|---|---|---|---|---|---|
