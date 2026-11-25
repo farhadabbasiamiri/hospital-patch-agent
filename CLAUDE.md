@@ -18,7 +18,7 @@ python -m venv .venv; .venv\Scripts\activate
 pip install -r requirements.txt
 python scripts/generate_data.py          # seeded (42): data/assets.csv, data/asset_vulns.csv
 python scripts/refresh_intel.py          # live NVD/KEV/EPSS -> data/cve_intel.json (needs internet)
-python -m pytest -q                      # 26 tests must pass
+python -m pytest -q                      # 28 tests must pass
 python eval/run_eval.py                  # offline eval -> eval/results/
 python eval/run_eval.py --llm            # also evaluates real Ollama agent
 python -m app.ui                         # Gradio at http://localhost:7860
