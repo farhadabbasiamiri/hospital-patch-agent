@@ -50,7 +50,7 @@ python scripts/refresh_intel.py      # pulls live CVSS (NVD), KEV (CISA), EPSS (
 ## Tests and evaluation
 
 ```bash
-pytest -q                          # 26 unit/integration/guardrail tests
+pytest -q                          # 28 unit/integration/guardrail tests
 python eval/run_eval.py            # writes eval/results/eval_report.md
 python eval/run_eval.py --llm      # also evaluates the real Ollama agent
 ```

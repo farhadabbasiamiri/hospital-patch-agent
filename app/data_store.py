@@ -16,7 +16,7 @@ def _to_bool(s):
 
 @lru_cache(maxsize=1)
 def load_assets() -> pd.DataFrame:
-    df = pd.read_csv(ASSETS_CSV, keep_default_na=False)
+    df = pd.read_csv(ASSETS_CSV, keep_default_na=False, encoding="utf-8")
     for c in BOOL_COLS_ASSETS:
         df[c] = _to_bool(df[c])
     return df
@@ -24,7 +24,7 @@ def load_assets() -> pd.DataFrame:
 
 @lru_cache(maxsize=1)
 def load_vulns() -> pd.DataFrame:
-    df = pd.read_csv(VULNS_CSV, keep_default_na=False)
+    df = pd.read_csv(VULNS_CSV, keep_default_na=False, encoding="utf-8")
     for c in BOOL_COLS_VULNS:
         df[c] = _to_bool(df[c])
     return df
@@ -32,7 +32,7 @@ def load_vulns() -> pd.DataFrame:
 
 @lru_cache(maxsize=1)
 def load_intel() -> dict:
-    return json.loads(CVE_INTEL_JSON.read_text())
+    return json.loads(CVE_INTEL_JSON.read_text(encoding="utf-8"))
 
 
 def get_asset(asset_id: str) -> dict | None:

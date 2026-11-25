@@ -135,13 +135,37 @@ def test_guardrail_unit():
 
 
 # ---------------- human approval
-def test_approval_flow(tmp_path, monkeypatch):
+def _submit_multi_approver(tmp_path, monkeypatch):
     monkeypatch.setattr(approvals, "APPROVALS_DB", tmp_path / "a.db")
-    rec = run_agent("R-0001", force_offline=True)
-    aid = approvals.submit(rec)
+    rec = run_agent("R-0138", force_offline=True)  # emergency change: ECAB + CISO required
+    assert len(rec["approvers"]) >= 2
+    return rec, approvals.submit(rec)
+
+
+def test_approval_flow(tmp_path, monkeypatch):
+    rec, aid = _submit_multi_approver(tmp_path, monkeypatch)
     assert approvals.submit(rec) == aid  # no duplicate pending items
     with pytest.raises(ValueError):
         approvals.review(aid, True, "", "", "")  # anonymous approval refused
-    assert approvals.review(aid, True, "Dr. Test", "CISO", "ok") == "APPROVED"
     with pytest.raises(ValueError):
-        approvals.review(aid, False, "X", "CISO", "")  # cannot re-decide
+        approvals.review(aid, True, "Eve", "Security Operations", "")  # not a required role
+    roles = rec["approvers"]
+    for r in roles[:-1]:  # quorum: partial sign-off keeps it PENDING
+        assert approvals.review(aid, True, "Dr. Test", r, "ok") == "PENDING"
+        with pytest.raises(ValueError):
+            approvals.review(aid, True, "Dr. Test", r, "")  # same role cannot sign twice
+    assert approvals.signoff_state(aid)["missing"] == [roles[-1]]
+    assert approvals.review(aid, True, "Dr. Test", roles[-1], "ok") == "APPROVED"
+    with pytest.raises(ValueError):
+        approvals.review(aid, False, "X", roles[0], "")  # cannot re-decide
+
+
+def test_single_role_cannot_approve_alone(tmp_path, monkeypatch):
+    rec, aid = _submit_multi_approver(tmp_path, monkeypatch)
+    assert approvals.review(aid, True, "CISO Person", "CISO", "") == "PENDING"
+    assert len(approvals.list_approvals("APPROVED")) == 0
+
+
+def test_any_required_role_can_reject(tmp_path, monkeypatch):
+    rec, aid = _submit_multi_approver(tmp_path, monkeypatch)
+    assert approvals.review(aid, False, "Dr. No", rec["approvers"][0], "unsafe") == "REJECTED"

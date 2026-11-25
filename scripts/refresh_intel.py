@@ -39,7 +39,7 @@ def nvd_cvss(cve_id, headers):
 
 
 def main():
-    data = json.loads(CVE_INTEL_JSON.read_text())
+    data = json.loads(CVE_INTEL_JSON.read_text(encoding="utf-8"))
     ids = list(data["cves"])
     headers = {"apiKey": os.environ["NVD_API_KEY"]} if os.getenv("NVD_API_KEY") else {}
 
@@ -71,7 +71,7 @@ def main():
 
     data["_meta"]["source"] = "live_refresh"
     data["_meta"]["refreshed_at"] = datetime.now(timezone.utc).isoformat()
-    CVE_INTEL_JSON.write_text(json.dumps(data, indent=2))
+    CVE_INTEL_JSON.write_text(json.dumps(data, indent=2), encoding="utf-8")
     print(f"Updated {CVE_INTEL_JSON}")
 
 

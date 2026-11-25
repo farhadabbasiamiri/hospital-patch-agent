@@ -16,7 +16,7 @@ from app.config import POLICY_DIR, RAG_BACKEND, EMBED_MODEL
 def load_chunks() -> list[dict]:
     chunks = []
     for path in sorted(POLICY_DIR.glob("POL-*.md")):
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         doc_id = path.name.split("_")[0]
         title = text.splitlines()[0].lstrip("# ").strip()
         for m in re.finditer(r"^## (§\d+) (.+?)\n(.*?)(?=^## |\Z)", text, flags=re.S | re.M):
