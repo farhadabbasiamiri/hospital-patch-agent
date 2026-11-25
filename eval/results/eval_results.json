@@ -1,6 +1,6 @@
 {
   "scenario": {
-    "scenarios": 12,
+    "scenarios": 14,
     "decision_accuracy": 1.0,
     "approval_gate_accuracy": 1.0,
     "correct_approver_rate": 1.0,
@@ -9,20 +9,20 @@
   "e2e_offline": {
     "cases": 10,
     "success_rate": 1.0,
-    "median_latency_ms": 11,
-    "max_latency_ms": 20
+    "median_latency_ms": 4,
+    "max_latency_ms": 6
   },
   "e2e_scripted_llm": {
     "cases": 10,
     "success_rate": 1.0,
-    "median_latency_ms": 10,
-    "max_latency_ms": 15
+    "median_latency_ms": 5,
+    "max_latency_ms": 5
   },
   "e2e_ollama": {
     "cases": 10,
     "success_rate": 1.0,
-    "median_latency_ms": 15121,
-    "max_latency_ms": 124139
+    "median_latency_ms": 14735,
+    "max_latency_ms": 16183
   },
   "guardrails": {
     "attempts": 20,

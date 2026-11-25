@@ -6,7 +6,7 @@ choose among `allowed_options`, but it cannot pick an action outside them and ca
 lower the approval requirement (see agent.apply_guardrails).
 """
 from app.config import SLA_DAYS, KEV_INTERNET_SLA_DAYS
-from app.scoring import score_risk
+from app.scoring import score_risk, defer_control_status
 
 
 def _approval(decision: str, change_type: str, asset: dict, tier: str) -> tuple[bool, list[str], list[str]]:
@@ -81,13 +81,20 @@ def decide(asset: dict, vuln: dict, cve: dict) -> dict:
             if window_ok:
                 decision, options, change_type = "PATCH", ["PATCH"], "normal"
                 reasons.append(f"Critical risk and the next patch window ({asset['next_window_days']} days) is inside the {sla}-day SLA.")
-            elif no_downtime:
+            elif no_downtime and asset["can_isolate"]:
                 decision, options = "ISOLATE", ["ISOLATE", "PATCH"]
                 reasons.append("Critical risk, window is beyond SLA, and the system has no downtime tolerance and no failover: "
                                "isolate now, patch in the next approved window.")
                 refs += ["POL-03 §3", "POL-06 §2"]
+            elif no_downtime:
+                decision, options = "DEFER_WITH_CONTROLS", ["DEFER_WITH_CONTROLS"]
+                reasons.append("Critical risk, window is beyond SLA, no downtime tolerance, no failover and the asset cannot be "
+                               "isolated: defer with controls, heightened monitoring and executive notification, then patch "
+                               "in the next approved window.")
+                refs += ["POL-03 §3", "POL-05 §1", "POL-05 §5", "POL-06 §5"]
             else:
-                decision, options, change_type = "PATCH", ["PATCH", "ISOLATE"], "emergency"
+                decision, change_type = "PATCH", "emergency"
+                options = ["PATCH", "ISOLATE"] if asset["can_isolate"] else ["PATCH"]
                 reasons.append(f"Critical risk and the next window ({asset['next_window_days']} days) misses the {sla}-day SLA: emergency change.")
                 refs += ["POL-02 §3"] + (["POL-03 §4"] if asset["redundancy"] else [])
         elif tier == "High":
@@ -109,6 +116,13 @@ def decide(asset: dict, vuln: dict, cve: dict) -> dict:
 
     if asset["category"] == "patient_care_device":
         refs.append("POL-04 §1")
+    defer_controls = defer_control_status(asset)
+    if decision == "DEFER_WITH_CONTROLS":
+        refs.append("POL-05 §2")
+        if defer_controls["missing"]:
+            reasons.append(f"POL-05 §2 requires {defer_controls['required']} active compensating controls; "
+                           f"{len(defer_controls['in_place'])} in place, so {defer_controls['missing']} more must be added "
+                           "before the deferral can be approved.")
     approval_required, approvers, approval_refs = _approval(decision, change_type, asset, tier)
 
     return {
@@ -121,5 +135,6 @@ def decide(asset: dict, vuln: dict, cve: dict) -> dict:
         "reasons": reasons,
         "approval_required": approval_required,
         "approvers": approvers,
+        "defer_controls": defer_controls,
         "policy_refs": sorted(set(refs + approval_refs)),
     }

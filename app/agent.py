@@ -246,6 +246,7 @@ def run_agent(record_id: str, analyst_note: str = "", llm=None, force_offline: b
         "risk_components": engine["risk"]["components"], "engine_decision": engine["decision"],
         "allowed_options": engine["allowed_options"], "change_type": engine["change_type"],
         "due_in_days": engine["due_in_days"], "engine_reasons": engine["reasons"],
+        "defer_controls": engine["defer_controls"],
         **final,
         **map_finding(cve["cve_id"], final["decision"], asset["controls"]),
         "status": "PENDING_HUMAN_APPROVAL" if final["approval_required"] else "INFORMATIONAL",

@@ -5,23 +5,41 @@ score = severity + threat + exposure + patient_safety + operational - control_cr
 Every component is returned so the dashboard and the report can show exactly why an
 asset/CVE pair ranks where it does. No black box: an analyst can recompute it by hand.
 """
-from app.config import (WEIGHTS, EXPOSURE_POINTS, CONTROL_CREDITS, CONTROL_CAP, TIERS, SAFETY_FLOOR_CVSS)
+from app.config import (WEIGHTS, EXPOSURE_POINTS, CONTROL_CREDITS, CONTROL_CAP, TIERS, SAFETY_FLOOR_CVSS,
+                        MIN_DEFER_CONTROLS, DEFER_CONTROLS)
 
 PERIMETER_CATEGORIES = {"identity_infra", "network_perimeter"}
+
+
+def control_is_relevant(control: str, asset: dict) -> bool:
+    """Controls only count where they actually help."""
+    exposure = asset["exposure"]
+    if control == "segmentation":
+        return exposure != "internet"
+    if control == "waf":
+        return exposure in ("internet", "dmz")
+    if control == "mfa":
+        return asset["category"] in PERIMETER_CATEGORIES
+    return True
+
+
+def defer_control_status(asset: dict) -> dict:
+    """POL-05 section 2: which active controls count towards a deferral, how many are still
+    missing, and which controls an approver may add."""
+    in_place = [c for c in asset.get("controls", []) if c in DEFER_CONTROLS and control_is_relevant(c, asset)]
+    candidates = [c for c in DEFER_CONTROLS
+                  if c not in in_place and (c != "waf" or control_is_relevant("waf", asset))]
+    return {"required": MIN_DEFER_CONTROLS, "in_place": in_place,
+            "missing": max(0, MIN_DEFER_CONTROLS - len(in_place)), "candidates": candidates}
 
 
 def control_credit(asset: dict) -> tuple[float, list[str]]:
     """Compensating-control credit. Controls only count where they actually help."""
     applied = []
     total = 0.0
-    exposure = asset["exposure"]
     for c in asset.get("controls", []):
         pts = CONTROL_CREDITS.get(c, 0)
-        if c == "segmentation" and exposure == "internet":
-            continue
-        if c == "waf" and exposure not in ("internet", "dmz"):
-            continue
-        if c == "mfa" and asset["category"] not in PERIMETER_CATEGORIES:
+        if not control_is_relevant(c, asset):
             continue
         total += pts
         applied.append(f"{c} (-{pts})")
