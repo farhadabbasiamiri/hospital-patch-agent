@@ -9,14 +9,14 @@
   "e2e_offline": {
     "cases": 10,
     "success_rate": 1.0,
-    "median_latency_ms": 3,
-    "max_latency_ms": 5
+    "median_latency_ms": 14,
+    "max_latency_ms": 17
   },
   "e2e_scripted_llm": {
     "cases": 10,
     "success_rate": 1.0,
-    "median_latency_ms": 3,
-    "max_latency_ms": 4
+    "median_latency_ms": 14,
+    "max_latency_ms": 17
   },
   "e2e_ollama": null,
   "guardrails": {
@@ -26,24 +26,24 @@
   },
   "baseline_vs_cvss": {
     "k": 25,
-    "top_k_overlap": 0.48,
+    "top_k_overlap": 0.56,
     "cvss_top_k_unsafe_to_patch_now": 14,
     "not_exploited_in_top_k_cvss": 4,
     "not_exploited_in_top_k_risk": 0,
-    "spearman_risk_vs_cvss": 0.643,
+    "spearman_risk_vs_cvss": 0.597,
     "kev_share_top_k_risk": 1.0,
     "kev_share_top_k_cvss": 0.84,
-    "clinical_share_top_k_risk": 0.44,
+    "clinical_share_top_k_risk": 0.48,
     "clinical_share_top_k_cvss": 0.64,
-    "mean_patient_impact_top_k_risk": 3.68,
+    "mean_patient_impact_top_k_risk": 3.76,
     "mean_patient_impact_top_k_cvss": 3.84
   },
   "sensitivity": {
     "runs": 40,
     "weight_jitter": "\u00b120%",
-    "mean_kendall_tau": 0.968,
-    "mean_top20_overlap": 0.971,
-    "mean_decision_change_rate": 0.057
+    "mean_kendall_tau": 0.962,
+    "mean_top20_overlap": 0.961,
+    "mean_decision_change_rate": 0.06
   },
   "rag": {
     "questions": 12,
@@ -52,5 +52,5 @@
     "hit@3": 1.0,
     "MRR@3": 0.917
   },
-  "intel_source": "offline_snapshot"
+  "intel_source": "live_refresh"
 }
