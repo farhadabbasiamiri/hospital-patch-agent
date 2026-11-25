@@ -158,7 +158,7 @@ def make_vulns(assets, rng, today):
 
 
 def write_csv(path, rows):
-    with open(path, "w", newline="") as f:
+    with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
@@ -171,7 +171,7 @@ def main():
     args = ap.parse_args()
     rng = random.Random(args.seed)
 
-    known = set(json.loads(CVE_INTEL_JSON.read_text())["cves"])
+    known = set(json.loads(CVE_INTEL_JSON.read_text(encoding="utf-8"))["cves"])
     for c in CATEGORIES.values():
         missing = set(c["cves"]) - known
         assert not missing, f"CVE(s) missing from cve_intel.json: {missing}"

@@ -66,7 +66,7 @@ def export_plan(categories, tiers, decisions):
     _, df = filter_plan(categories, tiers, decisions)
     LOG_DIR.mkdir(exist_ok=True)
     path = LOG_DIR / f"patch_plan_{datetime.now():%Y%m%d_%H%M%S}.csv"
-    df.to_csv(path, index=False)
+    df.to_csv(path, index=False, encoding="utf-8")
     return str(path)
 
 
@@ -156,7 +156,7 @@ def export_approved():
     df = approvals.list_approvals("APPROVED")
     LOG_DIR.mkdir(exist_ok=True)
     path = LOG_DIR / f"approved_change_plan_{datetime.now():%Y%m%d_%H%M%S}.csv"
-    df.to_csv(path, index=False)
+    df.to_csv(path, index=False, encoding="utf-8")
     return str(path)
 
 

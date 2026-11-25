@@ -31,7 +31,7 @@ ALL_POLICY_IDS = {c["chunk_id"] for c in get_index().chunks}
 
 # 1 ---------------------------------------------------------------- scenario accuracy
 def scenario_eval():
-    spec = json.loads((ROOT / "eval" / "scenarios.json").read_text())
+    spec = json.loads((ROOT / "eval" / "scenarios.json").read_text(encoding="utf-8"))
     rows = []
     for s in spec["scenarios"]:
         asset = {**spec["defaults"]["asset"], **s["asset"]}
@@ -157,7 +157,7 @@ def sensitivity_eval(plan, runs=40, jitter=0.2, k=20, seed=7):
 
 # 6 ---------------------------------------------------------------- RAG retrieval
 def rag_eval():
-    qs = json.loads((ROOT / "eval" / "rag_questions.json").read_text())
+    qs = json.loads((ROOT / "eval" / "rag_questions.json").read_text(encoding="utf-8"))
     rows = []
     for q in qs:
         hits = [h["chunk_id"] for h in get_index().search(q["q"], k=3)]
@@ -204,8 +204,8 @@ def main():
 
     results = {"scenario": sc, "e2e_offline": off, "e2e_scripted_llm": scr, "e2e_ollama": llm,
                "guardrails": gr, "baseline_vs_cvss": base, "sensitivity": sens, "rag": rag,
-               "intel_source": json.loads(config.CVE_INTEL_JSON.read_text())["_meta"]["source"]}
-    (OUT / "eval_results.json").write_text(json.dumps(results, indent=2))
+               "intel_source": json.loads(config.CVE_INTEL_JSON.read_text(encoding="utf-8"))["_meta"]["source"]}
+    (OUT / "eval_results.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
 
     rep = [
         "# Evaluation Report - Hospital Patch Prioritization Agent",
@@ -233,7 +233,7 @@ def main():
         "## 7. Explanation quality (manual)",
         "Score 5 agent explanations with `eval/rubric_template.csv` (clear, evidence-based, actionable, safe; 1-5 each).",
     ]
-    (OUT / "eval_report.md").write_text("\n".join(rep))
+    (OUT / "eval_report.md").write_text("\n".join(rep), encoding="utf-8")
     print("\n".join(rep[:4]))
     print(json.dumps({k: v for k, v in results.items() if k != "intel_source"}, indent=1))
 

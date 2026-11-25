@@ -12,14 +12,14 @@ def log_event(event: str, **fields):
     rec = {"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"), "event": event}
     for k, v in fields.items():
         rec[k] = v[:200] if isinstance(v, str) else v
-    with open(EVENT_LOG, "a") as f:
+    with open(EVENT_LOG, "a", encoding="utf-8") as f:
         f.write(json.dumps(rec, default=str) + "\n")
 
 
 def read_events(limit: int | None = None) -> list[dict]:
     if not EVENT_LOG.exists():
         return []
-    lines = EVENT_LOG.read_text().splitlines()
+    lines = EVENT_LOG.read_text(encoding="utf-8").splitlines()
     if limit:
         lines = lines[-limit:]
     return [json.loads(l) for l in lines if l.strip()]
