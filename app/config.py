@@ -11,6 +11,7 @@ LOG_DIR = ROOT / "logs"
 ASSETS_CSV = DATA_DIR / "assets.csv"
 VULNS_CSV = DATA_DIR / "asset_vulns.csv"
 CVE_INTEL_JSON = DATA_DIR / "cve_intel.json"
+FRAMEWORK_JSON = DATA_DIR / "framework_mapping.json"
 APPROVALS_DB = DATA_DIR / "approvals.db"
 EVENT_LOG = LOG_DIR / "agent_events.jsonl"
 

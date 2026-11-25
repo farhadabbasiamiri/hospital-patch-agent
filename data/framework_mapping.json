@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "note": "Team analyst mapping of this project's CVEs to MITRE ATT&CK (Enterprise) and of decisions to NIST CSF 2.0. It is NOT an official MITRE or NIST mapping. Identifiers and names were checked against attack.mitre.org and NIST CSWP 29.",
+    "verified_on": "2026-11-25",
+    "attack_version": "ATT&CK content v20.1",
+    "sources": ["https://attack.mitre.org/", "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf"]
+  },
+  "techniques": {
+    "T1027.009": {"name": "Obfuscated Files or Information: Embedded Payloads", "tactics": "Stealth"},
+    "T1040": {"name": "Network Sniffing", "tactics": "Credential Access, Discovery"},
+    "T1068": {"name": "Exploitation for Privilege Escalation", "tactics": "Privilege Escalation"},
+    "T1133": {"name": "External Remote Services", "tactics": "Persistence, Initial Access"},
+    "T1187": {"name": "Forced Authentication", "tactics": "Credential Access"},
+    "T1190": {"name": "Exploit Public-Facing Application", "tactics": "Initial Access"},
+    "T1203": {"name": "Exploitation for Client Execution", "tactics": "Execution"},
+    "T1204.002": {"name": "User Execution: Malicious File", "tactics": "Execution"},
+    "T1210": {"name": "Exploitation of Remote Services", "tactics": "Lateral Movement"},
+    "T1212": {"name": "Exploitation for Credential Access", "tactics": "Credential Access"},
+    "T1499.004": {"name": "Endpoint Denial of Service: Application or System Exploitation", "tactics": "Impact"},
+    "T1557": {"name": "Adversary-in-the-Middle", "tactics": "Credential Access, Collection"},
+    "T1566.001": {"name": "Phishing: Spearphishing Attachment", "tactics": "Initial Access"}
+  },
+  "cves": {
+    "CVE-2014-0160": {"techniques": ["T1190", "T1212"], "rationale": "Crafted heartbeat requests to an exposed TLS service leak memory that can hold credentials and keys."},
+    "CVE-2016-2183": {"techniques": ["T1040", "T1557"], "rationale": "An attacker positioned on the network collects long 64-bit block cipher traffic to recover plaintext."},
+    "CVE-2017-0144": {"techniques": ["T1210"], "rationale": "Remote code execution over SMBv1, used to move between hosts."},
+    "CVE-2019-0708": {"techniques": ["T1210"], "rationale": "Pre-authentication remote code execution over Remote Desktop."},
+    "CVE-2019-11687": {"techniques": ["T1027.009", "T1204.002"], "rationale": "An executable hidden in a DICOM file preamble runs if the file is executed."},
+    "CVE-2019-12256": {"techniques": ["T1210"], "rationale": "Network-reachable stack overflow in the embedded device TCP/IP stack."},
+    "CVE-2019-19781": {"techniques": ["T1190", "T1133"], "rationale": "Unauthenticated code execution on an internet-facing remote access gateway."},
+    "CVE-2020-11896": {"techniques": ["T1210"], "rationale": "Network-reachable remote code execution in the embedded Treck TCP/IP stack."},
+    "CVE-2020-1472": {"techniques": ["T1068", "T1210"], "rationale": "A Netlogon flaw lets a network attacker take domain administrator privileges."},
+    "CVE-2021-21972": {"techniques": ["T1190", "T1210"], "rationale": "Remote code execution against the vCenter management interface."},
+    "CVE-2021-22005": {"techniques": ["T1190", "T1210"], "rationale": "Arbitrary file upload leading to code execution on vCenter."},
+    "CVE-2021-26855": {"techniques": ["T1190"], "rationale": "Server-side request forgery on an exposed Exchange server."},
+    "CVE-2021-34527": {"techniques": ["T1068", "T1210"], "rationale": "Print Spooler allows privilege escalation and remote code execution."},
+    "CVE-2021-4034": {"techniques": ["T1068"], "rationale": "Local privilege escalation to root through pkexec."},
+    "CVE-2021-44228": {"techniques": ["T1190", "T1210"], "rationale": "A JNDI lookup gives remote code execution in services that log attacker input."},
+    "CVE-2022-0778": {"techniques": ["T1499.004"], "rationale": "A crafted certificate causes an infinite loop and denial of service."},
+    "CVE-2022-22965": {"techniques": ["T1190"], "rationale": "Remote code execution in a web application through data binding."},
+    "CVE-2022-26134": {"techniques": ["T1190"], "rationale": "Unauthenticated OGNL injection on a Confluence server."},
+    "CVE-2022-30190": {"techniques": ["T1566.001", "T1204.002", "T1203"], "rationale": "A malicious document invokes MSDT to run code on the client."},
+    "CVE-2022-40684": {"techniques": ["T1190", "T1133"], "rationale": "Authentication bypass on the firewall or VPN administrative interface."},
+    "CVE-2023-20198": {"techniques": ["T1190"], "rationale": "An exposed web UI lets an unauthenticated attacker create a privileged account."},
+    "CVE-2023-23397": {"techniques": ["T1187"], "rationale": "A crafted Outlook item makes the client send its NTLM hash to an attacker."},
+    "CVE-2023-34362": {"techniques": ["T1190"], "rationale": "SQL injection on an exposed file transfer application."},
+    "CVE-2023-36884": {"techniques": ["T1566.001", "T1203"], "rationale": "A crafted Office document delivered by phishing executes code."},
+    "CVE-2023-38545": {"techniques": ["T1203"], "rationale": "A malicious server response overflows a buffer in the curl client."},
+    "CVE-2023-44487": {"techniques": ["T1499.004"], "rationale": "HTTP/2 stream resets exhaust server resources."},
+    "CVE-2023-48795": {"techniques": ["T1557"], "rationale": "A man-in-the-middle truncates the SSH handshake to weaken the session."},
+    "CVE-2024-21762": {"techniques": ["T1190", "T1133"], "rationale": "Out-of-bounds write on the internet-facing SSL VPN."},
+    "CVE-2024-3400": {"techniques": ["T1190", "T1133"], "rationale": "Command injection on the internet-facing GlobalProtect gateway."},
+    "CVE-2024-6387": {"techniques": ["T1190", "T1210"], "rationale": "A race condition gives remote code execution in the SSH server."}
+  },
+  "mitigations": {
+    "M1030": "Network Segmentation",
+    "M1031": "Network Intrusion Prevention",
+    "M1032": "Multi-factor Authentication",
+    "M1038": "Execution Prevention",
+    "M1040": "Behavior Prevention on Endpoint",
+    "M1050": "Exploit Protection",
+    "M1051": "Update Software"
+  },
+  "control_mitigations": {
+    "segmentation": "M1030",
+    "ips": "M1031",
+    "mfa": "M1032",
+    "allowlisting": "M1038",
+    "edr": "M1040",
+    "waf": "M1050"
+  },
+  "decision_mitigations": {
+    "PATCH": ["M1051"],
+    "ISOLATE": ["M1030"],
+    "DEFER_WITH_CONTROLS": ["M1030", "M1031"],
+    "MONITOR": []
+  },
+  "csf": {
+    "ID.RA-01": "Vulnerabilities in assets are identified, validated, and recorded",
+    "ID.RA-05": "Threats, vulnerabilities, likelihoods, and impacts are used to understand inherent risk and inform risk response prioritization",
+    "ID.RA-06": "Risk responses are chosen, prioritized, planned, tracked, and communicated",
+    "ID.RA-07": "Changes and exceptions are managed, assessed for risk impact, recorded, and tracked",
+    "PR.PS-02": "Software is maintained, replaced, and removed commensurate with risk",
+    "PR.IR-01": "Networks and environments are protected from unauthorized logical access and usage",
+    "DE.CM-01": "Networks and network services are monitored to find potentially adverse events",
+    "DE.CM-09": "Computing hardware and software, runtime environments, and their data are monitored to find potentially adverse events"
+  },
+  "csf_common": ["ID.RA-01", "ID.RA-05", "ID.RA-06"],
+  "decision_csf": {
+    "PATCH": ["PR.PS-02", "ID.RA-07"],
+    "ISOLATE": ["PR.IR-01", "ID.RA-07"],
+    "DEFER_WITH_CONTROLS": ["ID.RA-07", "PR.IR-01", "DE.CM-09"],
+    "MONITOR": ["DE.CM-01", "DE.CM-09"]
+  }
+}
