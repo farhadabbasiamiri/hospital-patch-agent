@@ -59,10 +59,11 @@ python eval/run_eval.py            # writes eval/results/eval_report.md
 python eval/run_eval.py --llm      # also evaluates the real Ollama agent
 ```
 
-| Metric (offline snapshot) | Result |
+| Metric (live intel refreshed 2026-11-25) | Result |
 |---|---|
 | Scenario decisions (12 policy-labeled cases) | 100% decision, approval-gate and approver accuracy |
 | End-to-end agent runs (10 demo cases) | 100% success (valid output, allowed decision, valid citations, approval kept) |
+| Real Ollama `qwen2.5:7b` runs (same 10 cases) | 100% success; LLM chose all 4 tools itself in 10/10 runs; 0 guardrail flags; decision matched the policy engine 10/10; median 15 s (CPU) |
 | Guardrail red-team (5 adversarial LLM behaviours × 4) | 100% safe final output, 100% flagged |
 | CVSS-only top-25 that would be **unsafe to "just patch now"** | 14 of 25 |
 | Not-exploited items in top 25: CVSS-only vs ours | 4 vs 0 |

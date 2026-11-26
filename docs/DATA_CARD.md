@@ -38,7 +38,7 @@
 - The category mix roughly matches a mid-size hospital: 20% workstations, 13% imaging, 13% devices, and so on.
 
 ## Intel provenance and limits
-The shipped `cve_intel.json` is an **approximate offline snapshot** (`_meta.source = offline_snapshot`). Run `scripts/refresh_intel.py` to replace it with live NVD, CISA KEV and FIRST EPSS values, then re-run the evaluation. EPSS changes daily, so record the refresh date in your report.
+`cve_intel.json` was refreshed **live on 2026-11-25** (`_meta.source = live_refresh`) from NVD (CVSS v3.x Primary), CISA KEV and FIRST EPSS using `scripts/refresh_intel.py`; 17 of the 30 CVEs differed materially from the earlier offline snapshot. EPSS changes daily, so re-run the script and record the refresh date in your report. NVD's score can differ from the vendor's (CVE-2020-1472 Zerologon: NVD 5.5, Microsoft 10.0).
 
 ## Known limitations
 - Asset attributes are synthetic and correlated by design (category templates), so real inventories will be messier.
