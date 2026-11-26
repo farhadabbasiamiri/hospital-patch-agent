@@ -8,7 +8,7 @@ import pandas as pd
 
 from app import approvals
 from app.agent import OllamaLLM, run_agent, answer_policy_question
-from app.config import OLLAMA_MODEL, LOG_DIR
+from app.config import OLLAMA_MODEL, LOG_DIR, DEFER_CONTROLS
 from app.data_store import load_intel
 from app.monitoring import summary, read_events
 from app.plan import build_plan
@@ -99,6 +99,18 @@ def framework_lines(rec: dict) -> list[str]:
     ]
 
 
+def deferral_lines(rec: dict) -> list[str]:
+    d = rec.get("defer_controls")
+    if rec["decision"] != "DEFER_WITH_CONTROLS" or not d:
+        return []
+    have = ", ".join(DEFER_CONTROLS[c] for c in d["in_place"]) or "none"
+    text = f"**Deferral control requirement (POL-05 §2):** {d['required']} active controls. In place: {have}."
+    if d["missing"]:
+        options = ", ".join(DEFER_CONTROLS[c] for c in d["candidates"])
+        text += f" ⚠️ **Add at least {d['missing']} before this deferral can be approved.** Options: {options}."
+    return ["", text]
+
+
 def render_recommendation(rec: dict) -> str:
     if "error" in rec:
         return f"❌ {rec['error']}"
@@ -110,6 +122,7 @@ def render_recommendation(rec: dict) -> str:
         f"**Required approvers:** {', '.join(rec['approvers'])}",
         "", f"> {rec['summary']}", "", "**Evidence**", *[f"- {e}" for e in rec["evidence"]],
         "", "**Compensating controls**", *[f"- {c}" for c in rec["compensating_controls"]],
+        *deferral_lines(rec),
         "", *framework_lines(rec),
         "", f"**Policy citations:** {', '.join(rec['policy_citations'])}", "",
         f"**Confidence:** {rec['confidence']} · **Uncertainty:** {rec['uncertainty'] or 'none stated'}", "",
@@ -155,15 +168,18 @@ def queue_tables():
     return approvals.list_approvals("PENDING"), approvals.list_approvals()
 
 
-def decide_approval(approval_id, reviewer, role, note, approve: bool):
+def decide_approval(approval_id, reviewer, role, note, controls=None, approve: bool = True):
     try:
         if approval_id is None:
             raise ValueError("Enter the approval id from the pending table.")
-        status = approvals.review(int(approval_id), approve, reviewer, role, note)
+        status = approvals.review(int(approval_id), approve, reviewer, role, note,
+                                  controls=controls if approve else None)
         if status == "PENDING":
-            missing = approvals.signoff_state(int(approval_id))["missing"]
+            state = approvals.signoff_state(int(approval_id))
             msg = (f"✅ Sign-off recorded for #{int(approval_id)} by {reviewer} ({role}). "
-                   f"**Still pending** — waiting for: {', '.join(missing)}.")
+                   f"**Still pending** — waiting for: {', '.join(state['missing'])}.")
+            if state["deferral"] and state["deferral"]["still_needed"]:
+                msg += f" Compensating controls still needed: {state['deferral']['still_needed']}."
         else:
             msg = f"✅ Approval #{int(approval_id)} → **{status}** by {reviewer} ({role})."
     except ValueError as e:
@@ -282,6 +298,9 @@ def build_app() -> gr.Blocks:
                 a_name = gr.Textbox(label="Reviewer name")
                 a_role = gr.Dropdown(REVIEWER_ROLES, label="Reviewer role")
             a_note = gr.Textbox(label="Review note (rollback plan, downtime procedure, conditions)", lines=2)
+            a_controls = gr.CheckboxGroup(
+                [(label, key) for key, label in DEFER_CONTROLS.items()],
+                label="Deferrals only: compensating controls you confirm are being added (POL-05 §2)")
             with gr.Row():
                 ok_btn = gr.Button("✅ Approve", variant="primary")
                 no_btn = gr.Button("❌ Reject", variant="stop")
@@ -291,9 +310,9 @@ def build_app() -> gr.Blocks:
             with gr.Row():
                 exp_ap = gr.Button("⬇️ Export approved change plan")
                 exp_ap_file = gr.File(interactive=False)
-            ok_btn.click(lambda *a: decide_approval(*a, approve=True), [a_id, a_name, a_role, a_note],
+            ok_btn.click(lambda *a: decide_approval(*a, approve=True), [a_id, a_name, a_role, a_note, a_controls],
                          [a_msg, pend_tbl, hist_tbl])
-            no_btn.click(lambda *a: decide_approval(*a, approve=False), [a_id, a_name, a_role, a_note],
+            no_btn.click(lambda *a: decide_approval(*a, approve=False), [a_id, a_name, a_role, a_note, a_controls],
                          [a_msg, pend_tbl, hist_tbl])
             refresh_q.click(queue_tables, None, [pend_tbl, hist_tbl])
             exp_ap.click(export_approved, None, exp_ap_file)

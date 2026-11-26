@@ -62,6 +62,7 @@ def demo_cases(plan, k=10):
     for d in config.DECISIONS:
         picks += list(plan[plan.decision == d].record_id.head(2))
     picks += list(plan[plan.category == "patient_care_device"].record_id.head(2))
+    picks += list(plan.record_id)  # top up with next-ranked findings if the picks above overlap
     return list(dict.fromkeys(picks))[:k]
 
 

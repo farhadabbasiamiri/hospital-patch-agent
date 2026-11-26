@@ -84,6 +84,20 @@
      "cve": {"cve_id": "CVE-2019-11687", "cvss": 4.3, "kev": false, "epss": 0.01},
      "vuln": {"patch_available": false, "vendor_validated": false},
      "expected": {"decision": "MONITOR", "approval": false},
-     "rationale": "Low risk, no fix, already segmented: track vendor release (POL-01 §4)."}
+     "rationale": "Low risk, no fix, already segmented: track vendor release (POL-01 §4)."},
+    {"id": "S13", "name": "Life-critical station, validated patch, window in 45 days, cannot be isolated",
+     "asset": {"category": "patient_care_device", "exposure": "internal", "patient_safety_impact": 5, "operational_criticality": 5,
+               "life_critical": true, "downtime_tolerance": "none", "next_window_days": 45, "vendor_validation_required": true,
+               "can_isolate": false, "controls": []},
+     "cve": {"cve_id": "CVE-2017-0144", "cvss": 8.8, "kev": true, "epss": 0.97},
+     "expected": {"decision": "DEFER_WITH_CONTROLS", "approval": true, "approver_contains": "CISO"},
+     "rationale": "Cannot be isolated, so deferral handling applies with heightened monitoring (POL-06 §5, POL-05 §3)."},
+    {"id": "S14", "name": "EHR server with failover, Log4Shell, window in 23 days, cannot be isolated",
+     "asset": {"category": "ehr_clinical_app", "exposure": "dmz", "patient_safety_impact": 4, "operational_criticality": 5,
+               "downtime_tolerance": "low", "next_window_days": 23, "redundancy": true, "can_isolate": false,
+               "controls": ["segmentation"]},
+     "cve": {"cve_id": "CVE-2021-44228", "cvss": 10.0, "kev": true, "epss": 0.99},
+     "expected": {"decision": "PATCH", "approval": true, "approver_contains": "ECAB", "change_type": "emergency"},
+     "rationale": "Window misses the 7-day SLA and a failover exists: emergency change (POL-02 §3, POL-03 §4)."}
   ]
 }

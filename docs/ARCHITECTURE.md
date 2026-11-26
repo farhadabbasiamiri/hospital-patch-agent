@@ -29,6 +29,12 @@ flowchart TD
 `app/frameworks.py` attaches MITRE ATT&CK techniques/mitigations and NIST CSF 2.0 subcategories to every
 finding from `data/framework_mapping.json`, outside the LLM. See `docs/CONTROL_MAPPING.md`.
 
+## Deferral and isolation safeguards
+- ISOLATE is never recommended or offered for an asset with `can_isolate = false`.
+- A deferral needs 2 active controls from POL-05 §2. The engine reports how many are missing, and
+  `approvals.review()` refuses the final sign-off until approvers record enough additional controls.
+  The record is a declaration by the approver; nothing verifies the control on a system.
+
 ## Data flow for one investigation
 1. The analyst selects a finding (asset + CVE) in Tab 2 and can add context.
 2. The agent sends the task, the system prompt and the 4 tool schemas to the local LLM.
@@ -75,6 +81,7 @@ usable fix:
     Critical, window within SLA     -> PATCH (normal change)
     Critical, window beyond SLA:
         no downtime + no failover   -> ISOLATE now, patch in next window
+                                       (cannot isolate -> DEFER_WITH_CONTROLS, POL-06 §5)
         otherwise                   -> PATCH (emergency change: ECAB + CISO)
     High, window within SLA         -> PATCH
     High, window beyond SLA         -> DEFER_WITH_CONTROLS

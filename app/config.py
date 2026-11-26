@@ -47,6 +47,18 @@ CONTROL_CREDITS = {
 }
 CONTROL_CAP = 12
 
+# POL-05 section 2: a deferred finding needs at least this many active controls from this list.
+MIN_DEFER_CONTROLS = 2
+DEFER_CONTROLS = {
+    "segmentation": "network segmentation or access control lists",
+    "edr": "endpoint detection and response (EDR)",
+    "allowlisting": "application allowlisting",
+    "ips": "IPS/IDS signatures for the vulnerability",
+    "waf": "web application firewall rules",
+    "mfa": "multi-factor authentication for administrative access",
+    "disable_service": "disable the vulnerable service or protocol",
+}
+
 TIERS = [(78, "Critical"), (62, "High"), (45, "Medium"), (0, "Low")]
 SAFETY_FLOOR_CVSS = 9.0  # life-critical asset + CVSS >= this -> tier is at least High
 
