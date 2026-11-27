@@ -1,6 +1,7 @@
 """Lightweight monitoring: every agent run, tool call, error and approval is appended to a
 JSONL event log. No secrets or free-text analyst notes beyond 200 chars are stored."""
 import json
+import math
 import time
 from datetime import datetime, timezone
 
@@ -35,7 +36,8 @@ def summary() -> dict:
         "llm_runs": sum(1 for e in runs if e.get("mode") == "llm"),
         "offline_runs": sum(1 for e in runs if e.get("mode") == "offline"),
         "avg_latency_ms": round(sum(lat) / len(lat)) if lat else 0,
-        "p95_latency_ms": sorted(lat)[int(0.95 * (len(lat) - 1))] if lat else 0,
+        # nearest-rank percentile: with few runs this is the slowest one (never below the median)
+        "p95_latency_ms": sorted(lat)[math.ceil(0.95 * len(lat)) - 1] if lat else 0,
         "tool_calls": len(tools),
         "tool_errors": sum(1 for e in tools if not e.get("ok", True)),
         "guardrail_overrides": sum(len(e.get("guardrail_flags", [])) for e in runs),
